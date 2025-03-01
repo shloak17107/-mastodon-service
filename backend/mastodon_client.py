@@ -3,11 +3,11 @@ from mastodon import Mastodon
 #Step 1
 #Registers whatever app we create with Mastodon. Only needs to be done ONCE. Comment out code after running. 
 #Returns id and secret as strings, saving this into clientcreds.secret
-Mastodon.create_app(
-    'cs272app',
-    api_base_url = 'https://mastodon.social',   # change url to whatever we end up making, perhaps Flask app?
-    to_file = 'clientcreds.secret'
-)
+# Mastodon.create_app(
+#     'cs272app',
+#     api_base_url = 'https://mastodon.social',   # change url to whatever we end up making, perhaps Flask app?
+#     to_file = 'clientcreds.secret'
+# )
 
 ## in case we want to fetch these differently, shouldn't be required hopefully
 #client_id = creds['client_id']
