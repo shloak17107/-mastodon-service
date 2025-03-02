@@ -1,7 +1,14 @@
 from flask import Flask, request, jsonify
-from mastodon import Mastodon
+from mastodon_client import MastodonClient
 
 app = Flask(__name__)
+
+# Set up MastadonClient
+client = MastodonClient()
+client.register_app('cs272app', 'https://mastodon.social')
+client.authenticate_client()
+client.log_in(input("Enter the OAuth authorization code: "))
+client.initialize_user()
 
 @app.route('/api/create', methods=['POST'])
 def create_post():
@@ -10,7 +17,7 @@ def create_post():
     if not status:
         return jsonify({'error': 'No status provided'}), 400
     try:
-        post = mastodon.status_post(status)
+        post = client.create_post(status)
         return jsonify({'post': post}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -18,7 +25,7 @@ def create_post():
 @app.route('/api/retrieve/<int:post_id>', methods=['GET'])
 def retrieve_post(post_id):
     try:
-        post = mastodon.status(post_id)
+        post = client.get_post(post_id)
         return jsonify({'post': post}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -26,7 +33,7 @@ def retrieve_post(post_id):
 @app.route('/api/delete/<int:post_id>', methods=['DELETE'])
 def delete_post(post_id):
     try:
-        mastodon.status_delete(post_id)
+        client.delete_post(post_id)
         return jsonify({'message': 'Post deleted'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
